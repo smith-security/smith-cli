@@ -1,0 +1,31 @@
+name: smith-cli
+version: 0.0.1
+synopsis: Command line tool for <https://smith.st/ Smith>.
+homepage: https://github.com/smith-security/smith-cli
+license:  BSD3
+license-file: LICENSE
+author: Mark Hibberd
+maintainer: mth@smith.st
+copyright: (c) 2018, HotelKilo
+bug-reports: https://github.com/smith-security/smith-cli/issues
+category: Security
+build-type: Simple
+extra-source-files: ChangeLog.md, README.md
+cabal-version: >= 1.10
+description:
+  This is a command line tool for interacting with <https://smith.st Smith>.
+
+executable smith
+  default-language: Haskell2010
+  main-is: ../main/smith.hs
+  hs-source-dirs: src
+  build-depends:
+      base >= 3 && < 5
+    , nest == 0.*
+    , optparse-applicative >= 0.11 && < 0.15
+  other-modules:
+    Smith.Cli
+  ghc-options:
+    -Wall
+    -O2
+    -threaded
