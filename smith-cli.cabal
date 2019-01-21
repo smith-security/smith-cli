@@ -23,6 +23,7 @@ executable smith
       base >= 3 && < 5
     , nest == 0.*
     , optparse-applicative >= 0.11 && < 0.15
+    , smith-client
   other-modules:
     Smith.Cli
   ghc-options:
