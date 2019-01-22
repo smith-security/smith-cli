@@ -1,2 +1,0 @@
-module Smith.Cli (
-  ) where
