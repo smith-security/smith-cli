@@ -37,12 +37,6 @@ smith --environment muppets
 smith -e muppets
 ```
 
-Using smith to start ssh-agent.
-```
-# start ssh-agent issue a certificate for the muppets environment
-eval $(smith --environment muppets)
-```
-
 Running a command with access to an agent configured with your certificate.
 ```
 # start ssh-agent issue a certificate for the muppets environment

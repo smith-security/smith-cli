@@ -1,3 +1,0 @@
-[submodule "lib/smith-client"]
-	path = lib/smith-client
-	url = git@github.com:smith-security/smith-client
