@@ -6,7 +6,7 @@ license:  BSD3
 license-file: LICENSE
 author: Mark Hibberd
 maintainer: mth@smith.st
-copyright: (c) 2018, HotelKilo
+copyright: (c) 2019, HotelKilo
 bug-reports: https://github.com/smith-security/smith-cli/issues
 category: Security
 build-type: Simple
@@ -14,6 +14,9 @@ extra-source-files: ChangeLog.md, README.md
 cabal-version: >= 1.10
 description:
   This is a command line tool for interacting with <https://smith.st Smith>.
+source-repository head
+  type:     git
+  location: git@github.com:smith-security/smith-cli.git
 
 executable smith
   default-language: Haskell2010
