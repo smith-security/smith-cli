@@ -42,13 +42,13 @@ data IssueError =
 renderSmithError :: SmithError -> Text
 renderSmithError e =
   case e of
-    -- FUTURE: debug mode that prints message
+    -- FUTURE: debug mode that prints message.
     -- FIX: Handle specific error codes.
     SmithApplicationError code _message ->
-      mconcat ["There was an error performing your request. Error code [", getErrorCode code, "]"]
-    -- FUTURE: debug mode that prints message
-    SmithAuthorizationError code _message ->
-      mconcat ["You are not authorized to perform this request. Error code [", getErrorCode code, "]"]
+      mconcat ["There was an error performing your request [", getErrorCode code, "]."]
+    -- FUTURE: debug mode that prints message.
+    SmithAuthorizationError _code _message ->
+      mconcat ["You are not authorized to perform this request [", getErrorCode code, "]."]
     SmithAuthenticationError _err ->
       mconcat ["Smith could not authenticate you, please check your credentials and connectivity to Smith."]
     -- FUTURE: debug mode that prints body + message
