@@ -1,6 +1,0 @@
-[submodule "lib/smith-client"]
-	path = lib/smith-client
-	url = git@github.com:smith-security/smith-client
-[submodule "lib/openssh-protocol"]
-	path = lib/openssh-protocol
-	url = git@github.com:smith-security/openssh-protocol
