@@ -4,6 +4,7 @@ This is a command line interface for the [Smith](https://smith.st).
 
 The goal is to provide a convenient interface for working with smith.
 
+
 ### Configuration
 
 The smith cli will source credentials configuration as follows:
@@ -43,3 +44,7 @@ Running a command with access to an agent configured with your certificate.
 smith --environment muppets -- ssh user@kermit
 smith --environment muppets -- rsync -aH www www@gonzo:/var/www
 ```
+
+### Builds
+
+[![CircleCI](https://circleci.com/gh/smith-security/smith-cli.svg?style=svg)](https://circleci.com/gh/smith-security/smith-cli)
