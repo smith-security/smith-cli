@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import           Control.Applicative ((<|>), some)
+oimport           Control.Applicative ((<|>), some)
 
 import qualified Options.Applicative as Options
 

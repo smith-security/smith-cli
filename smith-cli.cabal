@@ -18,6 +18,10 @@ source-repository head
   type:     git
   location: git@github.com:smith-security/smith-cli.git
 
+flag static
+  description: Statically linking.
+  default: False
+
 executable smith
   default-language: Haskell2010
   main-is: ../main/smith.hs
@@ -38,6 +42,7 @@ executable smith
     , optparse-applicative >= 0.11 && < 0.15
     , smith-client == 0.0.*
     , text == 1.*
+    , tomland == 1.*
     , transformers >= 0.4 && < 0.6
     , transformers-bifunctors == 0.*
     , unix
@@ -50,7 +55,63 @@ executable smith
     Smith.Cli.Error
     Smith.Cli.KeyPair
     Smith.Cli.Parser
-  ghc-options:
-    -Wall
-    -O2
-    -threaded
+  if flag(static)
+    ghc-options:
+      -Wall
+      -O2
+      -threaded
+      -optl-static
+      -optl-pthread
+      -static
+  else
+    ghc-options:
+      -Wall
+      -O2
+      -threaded
+
+executable smith-config
+  default-language: Haskell2010
+  main-is: ../main/smith-config.hs
+  hs-source-dirs: src
+  build-depends:
+      base >= 3 && < 5
+    , attoparsec >= 0.9 && < 0.14
+    , bytestring == 0.10.*
+    , base64-bytestring == 1.0.*
+    , cereal == 0.5.*
+    , crypto-pubkey-openssh == 0.2.*
+    , crypto-pubkey-types == 0.4.*
+    , directory == 1.*
+    , filepath == 1.*
+    , HsOpenSSL == 0.11.*
+    , network == 2.*
+    , openssh-protocol == 0.0.*
+    , optparse-applicative >= 0.11 && < 0.15
+    , smith-client == 0.0.*
+    , text == 1.*
+    , tomland == 1.*
+    , transformers >= 0.4 && < 0.6
+    , transformers-bifunctors == 0.*
+    , unix
+  other-modules:
+    Smith.Cli.Agent
+    Smith.Cli.Command.Issue
+    Smith.Cli.Configuration
+    Smith.Cli.Data.Program
+    Smith.Cli.Dispatch
+    Smith.Cli.Error
+    Smith.Cli.KeyPair
+    Smith.Cli.Parser
+  if flag(static)
+    ghc-options:
+      -Wall
+      -O2
+      -threaded
+      -optl-static
+      -optl-pthread
+      -static
+  else
+    ghc-options:
+      -Wall
+      -O2
+      -threaded
