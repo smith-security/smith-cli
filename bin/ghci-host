@@ -1,0 +1,7 @@
+#!/bin/sh -eu
+
+if [ -f ../smith/demo/config/smith.config ]; then
+    source ../smith/demo/config/smith.config
+    export SMITH_ENDPOINT=http://localhost:20081
+fi
+./mafia quick -p main/smith-host.hs

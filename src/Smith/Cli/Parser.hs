@@ -14,6 +14,7 @@ module Smith.Cli.Parser (
 
   -- * arguments
   , program
+  , caKeysFile
   ) where
 
 import           Control.Applicative (many)
@@ -26,6 +27,9 @@ import qualified Options.Applicative as Options
 import           Smith.Cli.Data.Program (Program (..))
 import           Smith.Client.Data.Environment (Environment (..))
 import           Smith.Client.Data.CertificateRequest (Principal (..))
+
+import           System.IO (FilePath)
+
 
 environment :: Options.Parser Environment
 environment =
@@ -56,9 +60,17 @@ programName =
       Options.metavar "PROGRAM"
     , Options.help "Program to execute."
     ]
+
 programArgument :: Options.Parser Text
 programArgument =
  fmap Text.pack . Options.strArgument . mconcat $ [
       Options.metavar "ARGUMENT"
     , Options.help "Argument to provided program."
+    ]
+
+caKeysFile :: Options.Parser FilePath
+caKeysFile =
+ Options.strArgument . mconcat $ [
+      Options.metavar "FILE"
+    , Options.help "Output path for certificate authority public keys file."
     ]
