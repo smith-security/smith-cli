@@ -31,6 +31,7 @@ executable smith
     , crypto-pubkey-openssh == 0.2.*
     , crypto-pubkey-types == 0.4.*
     , directory == 1.*
+    , exceptions == 0.10.*
     , filepath == 1.*
     , HsOpenSSL == 0.11.*
     , network == 2.*

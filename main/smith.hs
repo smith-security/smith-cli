@@ -5,6 +5,7 @@ import           Control.Applicative ((<|>), some)
 import qualified Options.Applicative as Options
 
 import qualified Smith.Cli.Command.Issue as Issue
+import qualified Smith.Cli.Configuration as Configuration
 import           Smith.Cli.Data.Program (Program (..))
 import qualified Smith.Cli.Dispatch as Dispatch
 import qualified Smith.Cli.Error as Error
@@ -27,8 +28,9 @@ data Command =
 -- want to request access to servers.
 --
 main :: IO ()
-main =
-  Dispatch.dispatch parser >>= \a ->
+main = do
+  principal <- Configuration.configureDefaultPrincipal
+  Dispatch.dispatch (parser principal) >>= \a ->
     case a of
       Command environment principals program -> do
         smith <- Error.runOrFlailT Smith.renderSmithConfigureError $
@@ -38,10 +40,19 @@ main =
         Exit.exitSuccess
 
 
--- FUTURE default to current user, not root?
-parser :: Options.Parser Command
-parser =
-  Command
-    <$> Parser.environment
-    <*> ((some Parser.principal) <|> pure [Principal "root"])
-    <*> Options.optional Parser.program
+parser :: Principal -> Options.Parser Command
+parser principal =
+  let
+    issue =
+      Command
+        <$> Parser.environment
+        <*> ((some Parser.principal) <|> pure [principal])
+        <*> pure Nothing
+
+    exec =
+      Command
+        <$> Parser.environment
+        <*> ((some Parser.principal) <|> pure [principal])
+        <*> fmap Just Parser.program
+  in
+    issue <|> exec
