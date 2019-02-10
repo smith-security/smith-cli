@@ -21,12 +21,13 @@ import qualified Data.Text as Text
 
 import qualified Smith.Cli.Agent as Agent
 import           Smith.Cli.Data.Program (Program (..))
+import qualified Smith.Cli.Error as Error
 import           Smith.Cli.KeyPair (Comment (..), EncodedRSAKeyPair (..))
 import qualified Smith.Cli.KeyPair as KeyPair
 
 import           Smith.Client (Smith (..))
 import qualified Smith.Client as Smith
-import           Smith.Client.Error (SmithError (..), ErrorCode (..))
+import           Smith.Client.Error (SmithError (..))
 import           Smith.Client.Data.CertificateRequest (Principal (..), PublicKey (..), CertificateRequest (..))
 import           Smith.Client.Data.Environment (Environment (..))
 
@@ -78,7 +79,7 @@ renderIssueError :: IssueError -> Text
 renderIssueError e =
   case e of
     SmithIssueError err ->
-      renderSmithError err
+      Error.renderSmithError err
     AgentNotAvailableError ->
       "ssh-agent was not available, ensure it is running and SSH_AUTH_SOCK is set."
     KeyGenerationError ->
@@ -94,26 +95,6 @@ renderIssueError e =
     IssueAddKeyError (Agent.AddKeyProtocolError _) ->
       "Smith had a problem talking to your ssh-agent and could not add key or certificate. Please raise a support issue, and include your ssh-agent implementation and version."
 
-renderSmithError :: SmithError -> Text
-renderSmithError e =
-  case e of
-    -- FUTURE: debug mode that prints message.
-    -- FUTURE: Handle specific error codes for better error messages.
-    SmithApplicationError code _message ->
-      mconcat ["There was an error performing your request [", getErrorCode code, "]."]
-    -- FUTURE: debug mode that prints message.
-    SmithAuthorizationError code _message ->
-      mconcat ["You are not authorized to perform this request [", getErrorCode code, "]."]
-    SmithAuthenticationError _err ->
-      mconcat ["Smith could not authenticate you, please check your credentials and connectivity to Smith."]
-    -- FUTURE: debug mode that prints body + message
-    SmithResponseParseError code _body _message ->
-      mconcat ["Smith response parse error [", Text.pack . show $ code, "]. Please check connectivity to Smith and retry request."]
-    -- FUTURE: debug mode that prints body.
-    SmithStatusCodeError code _body ->
-      mconcat ["Smith status code error [", Text.pack . show $ code, "]. Please check connectivity to Smith and retry request."]
-    SmithUrlParseError message ->
-      mconcat ["Smith client url-parse error [", message, "]. Check you are running the latest client version, and raise a supportissue if this issue persists ."]
 
 left :: Applicative m => x -> ExceptT x m a
 left =

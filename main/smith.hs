@@ -4,11 +4,11 @@ import           Control.Applicative ((<|>), some)
 
 import qualified Options.Applicative as Options
 
+import qualified Smith.Cli.Abort as Abort
 import qualified Smith.Cli.Command.Issue as Issue
 import qualified Smith.Cli.Configuration as Configuration
 import           Smith.Cli.Data.Program (Program (..))
 import qualified Smith.Cli.Dispatch as Dispatch
-import qualified Smith.Cli.Error as Error
 import qualified Smith.Cli.Parser as Parser
 
 import qualified Smith.Client as Smith
@@ -33,9 +33,9 @@ main = do
   Dispatch.dispatch (parser principal) >>= \a ->
     case a of
       Command environment principals program -> do
-        smith <- Error.runOrFlailT Smith.renderSmithConfigureError $
+        smith <- Abort.runOrFlailT Smith.renderSmithConfigureError $
           Smith.configureT
-        Error.runOrFlailT Issue.renderIssueError $
+        Abort.runOrFlailT Issue.renderIssueError $
           Issue.issue smith environment principals program
         Exit.exitSuccess
 

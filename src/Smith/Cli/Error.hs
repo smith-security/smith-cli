@@ -1,53 +1,38 @@
 -- |
--- Command line error handling routines.
+-- Error handling routines.
 --
--- /danger:/ This module is designed to call System.Exit
--- and as such should only be called from the main module.
---
+{-# LANGUAGE OverloadedStrings #-}
 module Smith.Cli.Error (
-    flail
-  , runOrFlailT
-  , runOrFlail
+    renderSmithError
   ) where
 
-import           Control.Monad.Trans.Except (ExceptT (..), runExceptT)
-
 import           Data.Text (Text)
-import qualified Data.Text.IO as Text
+import qualified Data.Text as Text
 
-import qualified System.Exit as Exit
-import qualified System.IO as IO
-
-
--- |
--- On left case, the handler will be used to print error
--- message to 'System.IO.stderr' and exit with a status
--- code of @1@.
---
--- On right case, the value will be returned.
---
-runOrFlailT :: (e -> Text) -> ExceptT e IO a -> IO a
-runOrFlailT handler =
-  runOrFlail handler . runExceptT
+import           Smith.Client.Error (SmithError (..), ErrorCode (..))
 
 
 -- |
--- On left case, the handler will be used to print error
--- message to 'System.IO.stderr' and exit with a status
--- code of @1@.
+-- Render a smith client error in a way suitable for
+-- command line output.
 --
--- On right case, the value will be returned.
---
-runOrFlail :: (e -> Text) -> IO (Either e a) -> IO a
-runOrFlail handler action =
-  action >>= either (flail . handler) pure
-
-
--- |
--- Print error message to 'System.IO.stderr' and exit with
--- a status code of @1@.
---
-flail :: Text -> IO a
-flail msg = do
-  Text.hPutStrLn IO.stderr msg
-  Exit.exitFailure
+renderSmithError :: SmithError -> Text
+renderSmithError e =
+  case e of
+    -- FUTURE: debug mode that prints message.
+    -- FUTURE: Handle specific error codes for better error messages.
+    SmithApplicationError code _message ->
+      mconcat ["There was an error performing your request [", getErrorCode code, "]."]
+    -- FUTURE: debug mode that prints message.
+    SmithAuthorizationError code _message ->
+      mconcat ["You are not authorized to perform this request [", getErrorCode code, "]."]
+    SmithAuthenticationError _err ->
+      mconcat ["Smith could not authenticate you, please check your credentials and connectivity to Smith."]
+    -- FUTURE: debug mode that prints body + message
+    SmithResponseParseError code _body _message ->
+      mconcat ["Smith response parse error [", Text.pack . show $ code, "]. Please check connectivity to Smith and retry request."]
+    -- FUTURE: debug mode that prints body.
+    SmithStatusCodeError code _body ->
+      mconcat ["Smith status code error [", Text.pack . show $ code, "]. Please check connectivity to Smith and retry request."]
+    SmithUrlParseError message ->
+      mconcat ["Smith client url-parse error [", message, "]. Check you are running the latest client version, and raise a supportissue if this issue persists ."]
