@@ -13,7 +13,7 @@ jobs:
             - 'mafia-cli-'
       - run:
           name: 'build'
-          command: './mafia build'
+          command: 'cabal update && ./mafia build -f static'
       - save_cache:
           key: 'mafia-cli-{{ epoch }}'
           paths:
