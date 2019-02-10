@@ -1,4 +1,12 @@
 #!/bin/sh -eu
 
 
-docker build -t smithsecurity/smith-cli .
+docker build \
+    -t "smithsecurity/smith-cli:$CIRCLE_BUILD_NUM"
+    -t smithsecurity/smith-cli:latest .
+
+if [ "$CIRCLE_BRANCH" = "master" ]; then
+    docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
+    docker push "smithsecurity/smith-cli:$CIRCLE_BUILD_NUM"
+    docker push smithsecurity/smith-cli:latest
+fi
