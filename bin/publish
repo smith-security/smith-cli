@@ -6,7 +6,7 @@ STAMP="$VERSION-$(date "+%Y%m%d%H%M%S")-$(git log --pretty=format:%h -n 1)"
 : ${BRANCH:=$CIRCLE_BRANCH}
 
 docker build \
-    -t "smithsecurity/smith-cli:$CIRCLE_BUILD_NUM"
+    -t "smithsecurity/smith-cli:$CIRCLE_BUILD_NUM" \
     -t smithsecurity/smith-cli:latest .
 
 if [ "$CIRCLE_BRANCH" = "master" ]; then
