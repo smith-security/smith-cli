@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  smith-cli:
+    docker:
+      - image: markhibberd/haskell-circleci:latest
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 18.06.0-ce
+      - restore_cache:
+          keys:
+            - 'mafia-cli-'
+      - run:
+          name: 'build'
+          command: './mafia build'
+      - save_cache:
+          key: 'mafia-cli-{{ epoch }}'
+          paths:
+            - '/root/.mafia'
+      - run:
+          name: 'publish'
+          command: './bin/publish'
