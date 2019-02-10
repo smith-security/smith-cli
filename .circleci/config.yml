@@ -8,6 +8,9 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
           version: 18.06.0-ce
+      - run:
+          name: 'refresh-static-and-libssl'
+          command: 'apt-get -y update && apt-get -y upgrade && apt-get install -y libssl-dev'
       - restore_cache:
           keys:
             - 'mafia-cli-'
