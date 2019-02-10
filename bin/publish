@@ -1,5 +1,9 @@
 #!/bin/sh -eu
 
+VERSION="0.0.1"
+STAMP="$VERSION-$(date "+%Y%m%d%H%M%S")-$(git log --pretty=format:%h -n 1)"
+: ${PLATFORM:=debian/stretch}
+: ${BRANCH:=$CIRCLE_BRANCH}
 
 docker build \
     -t "smithsecurity/smith-cli:$CIRCLE_BUILD_NUM"
@@ -9,4 +13,13 @@ if [ "$CIRCLE_BRANCH" = "master" ]; then
     docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
     docker push "smithsecurity/smith-cli:$CIRCLE_BUILD_NUM"
     docker push smithsecurity/smith-cli:latest
+
+    for EXECUTABLE in smith smith-host; do
+        SOURCE="dist/build/$EXECUTABLE/$EXECUTABLE"
+        TARGET="s3://smith-artefacts/executables/$BRANCH/$EXECUTABLE/$PLATFORM/$VERSION/$STAMP/$EXECUTABLE-$STAMP"
+        MARKER="s3://smith-artefacts/executables/$BRANCH/$EXECUTABLE/$PLATFORM/latest"
+        echo "$TARGET" > latest;
+        aws s3 cp "$SOURCE" "$TARGET"
+        aws s3 cp latest "$MARKER"
+    done
 fi
