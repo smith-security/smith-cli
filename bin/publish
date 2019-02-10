@@ -1,0 +1,4 @@
+#!/bin/sh -eu
+
+
+docker build -t smithsecurity/smith-cli .
