@@ -32,6 +32,7 @@ import           Smith.Client.Data.Environment (Environment (..))
 
 import qualified System.Posix.Process as Posix
 
+
 -- |
 -- Requests a certificate, registering it with ssh-agent if possible.
 --

@@ -21,6 +21,7 @@ import qualified Options.Applicative as Options
 --
 -- On parser success, the value will be returned.
 --
+-- FUTURE: Write a sensible multi-path command render.
 dispatch :: Options.Parser a -> IO a
 dispatch parser = do
   Options.customExecParser
@@ -30,4 +31,8 @@ dispatch parser = do
       ])
     (Options.info
       (parser <**> Options.helper)
-      Options.idm)
+      (mconcat [
+          Options.fullDesc
+        , Options.progDesc "Request temporary access using Smith."
+        , Options.header "Smith secure access requests."
+        ]))
