@@ -27,7 +27,7 @@ renderSmithError e =
     SmithAuthorizationError code _message ->
       mconcat ["You are not authorized to perform this request [", getErrorCode code, "]."]
     SmithAuthenticationError _err ->
-      mconcat ["Smith could not authenticate you, please check your credentials and connectivity to Smith."]
+      mconcat ["Smith could not authenticate you, please check your credentials and connectivity to Smith. DEBUG: ", Text.pack . show $ _err]
     -- FUTURE: debug mode that prints body + message
     SmithResponseParseError code _body _message ->
       mconcat ["Smith response parse error [", Text.pack . show $ code, "]. Please check connectivity to Smith and retry request."]
