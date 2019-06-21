@@ -3,15 +3,17 @@
 VERSION="0.0.1"
 STAMP="$VERSION-$(date "+%Y%m%d%H%M%S")-$(git log --pretty=format:%h -n 1)"
 : ${PLATFORM:=debian/stretch}
-: ${BRANCH:=$CIRCLE_BRANCH}
-
+: ${BRANCH:=$BUILDKITE_BRANCH}
+: ${BUILD_NUMBER:=BUILDKITE_BUILD_NUMBER}
 docker build \
-    -t "smithsecurity/smith-cli:$CIRCLE_BUILD_NUM" \
+    -t "smithsecurity/smith-cli:$BUILD_NUMBER" \
     -t smithsecurity/smith-cli:latest .
 
-if [ "$CIRCLE_BRANCH" = "master" ]; then
+if [ "$BRANCH" = "master" ]; then
+    DOCKER_USERNAME=$(fetch-secret "build/DOCKER_USERNAME")
+    DOCKER_PASSWORD=$(fetch-secret "build/DOCKER_PASSWORD")
     docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
-    docker push "smithsecurity/smith-cli:$CIRCLE_BUILD_NUM"
+    docker push "smithsecurity/smith-cli:$BUILD_NUMBER"
     docker push smithsecurity/smith-cli:latest
 
     for EXECUTABLE in smith smith-host; do
