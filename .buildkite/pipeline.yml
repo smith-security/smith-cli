@@ -1,0 +1,18 @@
+steps:
+  - label: smith-cli
+    plugins:
+      - docker-compose#v3.0.3:
+          run: haskell
+          config: '.buildkite/docker-compose.yml'
+    command:
+      - 'aws s3 cp s3://smith-artefacts/cache/smith-cli-cache.tar.gz smith-cli-cache.tar.gz || true'
+      - 'tar xfz openssh-protcol-cache.tar.gz -C /root || true'
+      - 'rm -f openssh-protcol-cache.tar.gz'
+      - 'apt-get -y update && apt-get -y upgrade && apt-get install -y libssl-dev'
+      - 'mafia update'
+      - 'mafia build'
+      - 'tar cfz smith-cli-cache.tar.gz -C /root .mafia .cabal'
+      - 'aws s3 cp smith-cli-cache.tar.gz s3://smith-artefacts/cache/smith-cli-cache.tar.gz'
+      - 'mafia test'
+      - 'mafia build -fstatic'
+      - './bin/publish'
