@@ -5,9 +5,10 @@ steps:
           run: haskell
           config: '.buildkite/docker-compose.yml'
     command:
+      - 'rm -rf /root/.cabal /root/.mafia'
       - 'aws s3 cp s3://smith-artefacts/cache/smith-cli-cache.tar.gz smith-cli-cache.tar.gz || true'
-      - 'tar xfz openssh-protcol-cache.tar.gz -C /root || true'
-      - 'rm -f openssh-protcol-cache.tar.gz'
+      - 'tar xfz smith-cli-cache.tar.gz -C /root || true'
+      - 'rm -f smith-cli-cache.tar.gz'
       - 'apt-get -y update && apt-get -y upgrade && apt-get install -y libssl-dev'
       - 'mafia update'
       - 'mafia build'
