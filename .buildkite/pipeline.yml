@@ -4,6 +4,8 @@ steps:
       - docker-compose#v3.0.3:
           run: haskell
           config: '.buildkite/docker-compose.yml'
+      - artifacts#v1.2.0:
+          upload: "publish/*"
     command:
       - 'aws s3 cp s3://smith-artefacts/cache/smith-cli-cache.tar.gz smith-cli-cache.tar.gz || true'
       - 'tar xfz smith-cli-cache.tar.gz -C /root || true'
@@ -16,3 +18,10 @@ steps:
       - 'mafia test'
       - 'mafia build -fstatic'
       - './bin/publish'
+
+  - label: smith-cli-docker
+    plugins:
+      - artifacts#v1.2.0:
+          download: "publish/*"
+    command:
+      - './bin/push'
