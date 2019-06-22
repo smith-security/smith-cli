@@ -4,7 +4,7 @@ VERSION="0.0.1"
 STAMP="$VERSION-$(date "+%Y%m%d%H%M%S")-$(git log --pretty=format:%h -n 1)"
 : ${PLATFORM:=debian/stretch}
 : ${BRANCH:=$BUILDKITE_BRANCH}
-: ${BUILD_NUMBER:=BUILDKITE_BUILD_NUMBER}
+: ${BUILD_NUMBER:=$BUILDKITE_BUILD_NUMBER}
 
 for EXECUTABLE in smith smith-host; do
     TARGET="dist/build/$EXECUTABLE/$EXECUTABLE"
