@@ -5,7 +5,7 @@ steps:
           run: haskell
           config: '.buildkite/docker-compose.yml'
     command:
-      - 'rm -rf /root/.cabal /root/.mafia'
+      - 'rm -rf /root/.cabal/logs /root/.cabal/packages /root/.cabal/stores /root/.cabal/config /root/.mafia'
       - 'aws s3 cp s3://smith-artefacts/cache/smith-cli-cache.tar.gz smith-cli-cache.tar.gz || true'
       - 'tar xfz smith-cli-cache.tar.gz -C /root || true'
       - 'rm -f smith-cli-cache.tar.gz'
