@@ -10,7 +10,7 @@ steps:
       - 'tar xfz smith-cli-cache.tar.gz -C /root || true'
       - 'rm -f smith-cli-cache.tar.gz'
       - 'apt-get -y update && apt-get -y upgrade && apt-get install -y libssl-dev'
-      - 'mafia update'
+      - 'cabal update'
       - 'mafia build'
       - 'tar cfz smith-cli-cache.tar.gz -C /root .mafia .cabal'
       - 'aws s3 cp smith-cli-cache.tar.gz s3://smith-artefacts/cache/smith-cli-cache.tar.gz'
