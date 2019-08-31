@@ -16,14 +16,5 @@ steps:
       - 'tar cfz smith-cli-cache.tar.gz -C /root .mafia .cabal'
       - 'aws s3 cp smith-cli-cache.tar.gz s3://smith-artefacts/cache/smith-cli-cache.tar.gz'
       - 'mafia test'
-      - 'mafia build -fstatic'
+      - 'mafia build'
       - './bin/publish'
-
-  - wait
-
-  - label: smith-cli-docker
-    plugins:
-      - artifacts#v1.2.0:
-          download: "publish/*"
-    command:
-      - './bin/push'

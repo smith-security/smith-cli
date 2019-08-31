@@ -10,8 +10,8 @@ if [ "$BRANCH" = "master" ]; then
     mkdir -p "publish"
     for EXECUTABLE in smith smith-host; do
         SOURCE="dist/build/$EXECUTABLE/$EXECUTABLE"
-        TARGET="s3://smith-artefacts/executables/$BRANCH/$EXECUTABLE/$PLATFORM/$VERSION/$STAMP/$EXECUTABLE-$STAMP"
-        MARKER="s3://smith-artefacts/executables/$BRANCH/$EXECUTABLE/$PLATFORM/latest"
+        TARGET="s3://smith-artefacts/executables/$BRANCH/haskell-$EXECUTABLE/$PLATFORM/$VERSION/$STAMP/haskell-$EXECUTABLE-$STAMP"
+        MARKER="s3://smith-artefacts/executables/$BRANCH/hakell-$EXECUTABLE/$PLATFORM/latest"
         echo "$TARGET" > latest;
         cp latest publish/$EXECUTABLE
         aws s3 cp "$SOURCE" "$TARGET"
